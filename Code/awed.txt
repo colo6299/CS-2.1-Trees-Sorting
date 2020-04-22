@@ -1,0 +1,16 @@
+word_list = ['lets', 'get', 'bacon', 'bacon']
+word_dict = {}
+max_count = 0
+max_word = ''
+
+for word in word_list:
+    if word not in word_dict:
+        word_dict[word] = 1
+    else:
+        word_dict[word] += 1
+        word_count = word_dict[word]
+        if word_count > max_length:
+            max_length = word_count
+            max_word = word
+
+return max_word

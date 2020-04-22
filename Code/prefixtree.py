@@ -1,6 +1,6 @@
 #!python3
 
-from prefixtreenode import PrefixTreeNode
+from trienode import PrefixTreeNode
 
 
 class PrefixTree:
@@ -35,15 +35,52 @@ class PrefixTree:
 
     def is_empty(self):
         """Return True if this prefix tree is empty (contains no strings)."""
-        # TODO
+        if self.root.num_children() == 0:
+            return True
+        else:
+            return False
 
     def contains(self, string):
         """Return True if this prefix tree contains the given string."""
-        # TODO
+        return self.contains_recursive(self.root, string)
+        
+    # watch for recursion depth!!!  long word bad >:(
+    def contains_recursive(self, node, tail):
+        if node.has_child(tail[0]):
+            if len(tail) == 1:
+                if node.get_child(tail[0]).terminal is True:
+                    return True
+                else:
+                    return False
+            next_node = node.get_child(tail[0])
+            return self.contains_recursive(next_node, tail[1:]) 
+        else:
+            return False
 
     def insert(self, string):
         """Insert the given string into this prefix tree."""
-        # TODO
+        self.insert_recursive(self.root, string)
+        
+    def insert_recursive(self, node, tail):
+        string = tail
+        first_char = string[0]
+        if not node.has_child(first_char):
+            if len(tail) == 1:
+                node.add_child(first_char, PrefixTreeNode(first_char, True))
+                self.size += 1
+                return
+            else:
+                next_node = PrefixTreeNode(first_char)
+                node.add_child(first_char, next_node)
+                self.insert_recursive(next_node, tail[1:])
+        else:
+            next_node = node.get_child(first_char)
+            if len(string) == 1:
+                if next_node.terminal is not True:
+                    next_node.terminal = True
+                    self.size += 1
+            else:
+                self.insert_recursive(next_node, tail[1:])
 
     def _find_node(self, string):
         """Return a pair containing the deepest node in this prefix tree that
@@ -68,7 +105,18 @@ class PrefixTree:
         """Return a list of all strings stored in this prefix tree."""
         # Create a list of all strings in prefix tree
         all_strings = []
-        # TODO
+        charlists = []
+        self._strings_recursive(self.root, [], charlists)
+        for charlist in charlists:
+            all_strings.append(''.join(charlist)) # I don't remember if that's how you do it lol
+        return all_strings                        # UDPATE: It wasn't.
+            
+    def _strings_recursive(self, node, charlist, outlist):
+        charlist.append(node.character)
+        if node.terminal:
+            outlist.append(list(charlist))
+        for child in node.get_children():  # I had a thing for all the extra lists made, but I deleted it
+            self._strings_recursive(child, list(charlist), outlist)
 
     def _traverse(self, node, prefix, visit):
         """Traverse this prefix tree with recursive depth-first traversal.
