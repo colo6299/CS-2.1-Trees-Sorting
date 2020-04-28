@@ -13,8 +13,10 @@ def is_sorted(list_in):
 def bubble_sort(items, descending=False, comparison=lambda a, b: a > b):
     """Sort given items by swapping adjacent items that are out of order, and
     repeating until all items are in sorted order.
-    TODO: Running time: ??? Why and under what conditions?
-    TODO: Memory usage: ??? Why and under what conditions?"""
+
+    Running time: O(n) when sorted, O(n^2) average and worst(when reverse sorted)
+
+    Memory usage: O(n) always, it's in place"""
 
     finished = False
     while finished is False:
@@ -37,8 +39,10 @@ def bubble_sort(items, descending=False, comparison=lambda a, b: a > b):
 
 def cocktail_shaker_sort(items, descending=False, comparison=lambda a, b: a > b):
     """Sort given items by shaking the list really hard.
-    TODO: Running time: ??? Why and under what conditions?
-    TODO: Memory usage: ??? Why and under what conditions?"""
+
+    Running time: O(n) when sorted, O(n^2) average and worst(when reverse sorted)
+    
+    Memory usage: O(n) always, it's in place"""
 
     finished = False
     while finished is False:
@@ -78,8 +82,10 @@ def cocktail_shaker_sort(items, descending=False, comparison=lambda a, b: a > b)
 def selection_sort(items, descending=False, comparison=lambda a, b: a > b):
     """Sort given items by finding minimum item, swapping it with first
     unsorted item, and repeating until all items are in sorted order.
-    TODO: Running time: ??? Why and under what conditions?
-    TODO: Memory usage: ??? Why and under what conditions?"""
+
+    Running time: O(n^2) always, needs to check rest of list every time
+
+    Memory usage: O(n) always, it's in place"""
 
     if descending:  # What does DRY stand for, anyway?
         for index in range(len(items)):
@@ -100,8 +106,10 @@ def selection_sort(items, descending=False, comparison=lambda a, b: a > b):
 def insertion_sort(items, descending=False, comparison=lambda a, b: a > b):
     """Sort given items by taking first unsorted item, inserting it in sorted
     order in front of items, and repeating until all items are in order.
-    TODO: Running time: ??? Why and under what conditions?
-    TODO: Memory usage: ??? Why and under what conditions?"""
+
+    O(n) when sorted, O(n^2) average and worst(reverse sort)
+
+    Memory usage: O(n) always, it's in place"""
     
     for index in range(1, len(items)):
         _insertion_helper(items, index, items[index], descending, comparison)
@@ -123,8 +131,6 @@ def _insertion_helper(list_in, sublist_index, item, descending=False, comparison
 def _binary_locator(list_in, lower_index, upper_index, item, descending=False, comparison=lambda a, b: a > b):
     '''
     Helper helper... recursive binary search for index
-
-    definitely going to need tweaking
     '''
     if upper_index == lower_index:
         return upper_index
