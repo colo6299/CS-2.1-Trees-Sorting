@@ -1,5 +1,6 @@
 #!python
 from sorting_iterative import insertion_sort, bubble_sort
+from random import random
 
 def merge(items1, items2):
     """Merge given lists of items, each assumed to already be in sorted order,
@@ -66,18 +67,29 @@ def _merge_sort_helper(items):
     return merge(_merge_sort_helper(items1), _merge_sort_helper(items2))
 
 
-def partition(items, low, high):
+def partition(items, low, high):  
     """Return index `p` after in-place partitioning given items in range
-    `[low...high]` by choosing a pivot (TODO: document your method here) from
+    `[low...high]` by choosing a pivot (centerpoint with small random offset) from
     that range, moving pivot into index `p`, items less than pivot into range
     `[low...p-1]`, and items greater than pivot into range `[p+1...high]`.
     TODO: Running time: ??? Why and under what conditions?
     TODO: Memory usage: ??? Why and under what conditions?"""
-    # TODO: Choose a pivot any way and document your method in docstring above
-    # TODO: Loop through all items in range [low...high]
-    # TODO: Move items less than pivot into front of range [low...p-1]
-    # TODO: Move items greater than pivot into back of range [p+1...high]
-    # TODO: Move pivot item into final position [p] and return index p
+
+    pivot = items[(high + low) // 2]  # do the randy bits
+    back = low
+    p_index = 0
+    for front in range(low, high):
+        p_index = front
+        if items[front] >= pivot:
+            if back <= front:
+                back = front
+            while back < high and not items[back] < pivot:
+                back += 1
+            if back == high:
+                return p_index
+            items[front], items[back] = items[back], items[front]
+    return p_index + 1
+
 
 def quick_sort(items, low=None, high=None):
     """Sort given items in place by partitioning items in range `[low...high]`
@@ -85,12 +97,31 @@ def quick_sort(items, low=None, high=None):
     TODO: Best case running time: ??? Why and under what conditions?
     TODO: Worst case running time: ??? Why and under what conditions?
     TODO: Memory usage: ??? Why and under what conditions?"""
-    # TODO: Check if high and low range bounds have default values (not given)
-    # TODO: Check if list or range is so small it's already sorted (base case)
-    # TODO: Partition items in-place around a pivot and get index of pivot
-    # TODO: Sort each sublist range by recursively calling quick sort
+    if low is None:
+        low = 0
+    if high is None:
+        high = len(items)
+    #print(high-low)
+    if (high - low) <= 1:
+        return
+    mid = partition(items, low, high)
+    quick_sort(items, low, mid)
+    quick_sort(items, mid, high)
+    
+
+
+# NOTE: NOT MY CODE, USING FOR LEARNING PURPOSES
+def slow_sort(list_in, i=0, j=None):
+    n = len(list_in)
+    if n == 1:
+        return list_in
+    mid = n // 2
+    mx = max(slow_sort(list_in[:mid])[-1], slow_sort(list_in[mid:])[-1])
+    list_in.remove(mx)
+    return slow_sort(list_in) + [mx]
 
 if __name__ == "__main__":
-    ls = [1, 5, 6, 2, 3, 4]
-    
-    print('\nlist is: ' + str(split_sort_merge(ls)))
+    ls = [4, 2]
+    print('\np_index: ' + str(partition(ls, 0, len(ls))))
+   # print('\np_index: ' + str(quick_sort(ls)))
+    print(ls)

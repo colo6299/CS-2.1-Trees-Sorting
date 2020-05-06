@@ -21,8 +21,8 @@ class BinaryMinHeap(object):
 
     def is_empty(self):
         """Return True if this heap is empty, or False otherwise."""
-        # TODO: Check if empty based on how many items are in the list
-        # ...
+        if len(self.items) <= 0:
+            return True
 
     def size(self):
         """Return the number of items in this heap."""
@@ -45,7 +45,7 @@ class BinaryMinHeap(object):
         assert self.size() > 0
         return self.items[0]
 
-    def delete_min(self):
+    def delete_min(self, len_override=None):
         """Remove and return the minimum item at the root of this heap.
         TODO: Best case running time: ??? under what conditions?
         TODO: Worst case running time: ??? under what conditions?"""
@@ -60,7 +60,7 @@ class BinaryMinHeap(object):
         last_item = self.items.pop()
         self.items[0] = last_item
         if self.size() > 1:
-            self._bubble_down(0)
+            self._bubble_down(0, len_override)
         return min_item
 
     def replace_min(self, item):
@@ -94,12 +94,12 @@ class BinaryMinHeap(object):
         # Get the parent's index and value
         parent_index = self._parent_index(index)
         parent_item = self.items[parent_index]
-        # TODO: Swap this item with parent item if values are out of order
-        # ...
-        # TODO: Recursively bubble up again if necessary
-        # ...
+        if parent_item > item:
+            self.items[parent_index], self.items[index] = item, parent_item
+            self._bubble_up(parent_index)
 
-    def _bubble_down(self, index):
+
+    def _bubble_down(self, index, len_override=None):
         """Ensure the heap ordering property is true below the given index,
         swapping out of order items, or until a leaf node is reached.
         Best case running time: O(1) if item is smaller than both child items.
@@ -110,21 +110,30 @@ class BinaryMinHeap(object):
         # Get the index of the item's left and right children
         left_index = self._left_child_index(index)
         right_index = self._right_child_index(index)
-        if left_index > self._last_index():
+        vlen = self._last_index(len_override)
+        if left_index > vlen:
             return  # This index is a leaf node (does not have any children)
         # Get the item's value
         item = self.items[index]
-        # TODO: Determine which child item to compare this node's item to
-        child_index = 0
-        # ...
-        # TODO: Swap this item with a child item if values are out of order
-        child_item = self.items[child_index]
-        # ...
-        # TODO: Recursively bubble down again if necessary
-        # ...
 
-    def _last_index(self):
+        child_index = 0
+        if left_index >= vlen+1 or right_index >= vlen+1:
+            child_index = left_index
+        elif self.items[left_index] > self.items[right_index]:
+            child_index = right_index
+        else:
+            child_index = left_index
+        
+        if item > self.items[child_index]:
+            self.items[index], self.items[child_index] = self.items[child_index], item
+
+        self._bubble_down(child_index)
+
+
+    def _last_index(self, length_override=None):
         """Return the last valid index in the underlying array of items."""
+        if length_override is not None:
+            return length_override -1 
         return len(self.items) - 1
 
     def _parent_index(self, index):
@@ -140,6 +149,18 @@ class BinaryMinHeap(object):
     def _right_child_index(self, index):
         """Return the right child index of the item at the given index."""
         return (index << 1) + 2  # Shift left to multiply by 2
+
+
+def _heap_sorter(heap):
+    for i in range(heap.size):
+        virtual_len = heap.size-i
+        heap.items[heap.size] = heap.delete_min(virtual_len)
+
+def not_heapify(items):
+    pass
+
+def heap_sort(items):
+    pass
 
 
 def test_binary_min_heap():
