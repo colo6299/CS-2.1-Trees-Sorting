@@ -150,7 +150,7 @@ class BinaryMinHeap(object):
         """Return the right child index of the item at the given index."""
         return (index << 1) + 2  # Shift left to multiply by 2
 
-
+# I don't have time for in-place 
 def _heap_sorter(heap):
     for i in range(heap.size):
         virtual_len = heap.size-i
