@@ -150,18 +150,23 @@ class BinaryMinHeap(object):
         """Return the right child index of the item at the given index."""
         return (index << 1) + 2  # Shift left to multiply by 2
 
-# I don't have time for in-place 
+# I don't have time for in-place. Too bad!
 def _heap_sorter(heap):
     for i in range(heap.size):
         virtual_len = heap.size-i
         heap.items[heap.size] = heap.delete_min(virtual_len)
 
 def not_heapify(items):
-    pass
+    heap = BinaryMinHeap(items)
+    retlist = []
+    while len(retlist) < len(items):
+        retlist.append(heap.delete_min())
+    return retlist
 
 def heap_sort(items):
-    pass
-
+    tlist = not_heapify(items)
+    items.clear()
+    items.extend(tlist)
 
 def test_binary_min_heap():
     # Create a binary min heap of 7 items

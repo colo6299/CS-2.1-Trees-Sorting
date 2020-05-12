@@ -80,9 +80,9 @@ def partition(items, low, high):
     p_index = 0
     for front in range(low, high):
         p_index = front
-        if items[front] >= pivot:
-            if back <= front:
-                back = front
+        if items[front] > pivot: 
+            if back <= front:    
+                back = front     
             while back < high and not items[back] < pivot:
                 back += 1
             if back == high:
