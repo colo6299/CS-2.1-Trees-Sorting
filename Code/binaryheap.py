@@ -1,5 +1,5 @@
 #!python
-
+from kv_holder import KVHolder
 
 class BinaryMinHeap(object):
     """BinaryMinHeap: a partially ordered collection with efficient methods to
